@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="app-version" content="3" />
+<link rel="icon" href="data:," />
+<title>EMAIL SEMENTARA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:dark;
+    --bg:#05080f; --surface:#0d1526; --surface2:#0a101f; --border:#22314f;
+    --text:#f1f5f9; --muted:#94a3b8; --muted2:#64748b;
+    --gold:#f5c451; --gold-strong:#eab308; --gold-soft:rgba(245,196,81,.10); --gold-border:rgba(245,196,81,.38);
+    --cyan:#22d3ee; --cyan-soft:rgba(34,211,238,.10); --cyan-border:rgba(34,211,238,.35);
+    --accent:#22d3ee; --accent-hover:#67e8f9; --accent-soft:rgba(34,211,238,.10); --accent-border:rgba(34,211,238,.35);
+    --warning-bg:#2a2110; --warning-border:#713f12; --warning-text:#fde68a;
+    --shadow:0 10px 40px rgba(0,0,0,.45), 0 0 24px rgba(34,211,238,.05), 0 0 24px rgba(245,196,81,.04);
+    --radius:20px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;background:
+    radial-gradient(560px 320px at 8% -60px, rgba(245,196,81,.14), transparent 65%),
+    radial-gradient(640px 380px at 105% 240px, rgba(34,211,238,.12), transparent 65%),
+    radial-gradient(700px 500px at 50% 115%, rgba(245,196,81,.06), transparent 65%),
+    var(--bg);
+    background-attachment:fixed}
+  button,[role="button"],select,input{ min-height:44px; }
+  button{cursor:pointer}
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 40px}
+  @media(min-width:640px){.wrap{padding:28px 20px 56px}}
+
+  /* Brand + intro */
+  .brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .brand-mark{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#1a1202;background:linear-gradient(135deg,#fde68a,var(--gold) 55%,var(--gold-strong));box-shadow:0 0 16px rgba(245,196,81,.45)}
+  .brand-name{font-weight:800;letter-spacing:.22em;font-size:15px;color:var(--gold);text-shadow:0 0 14px rgba(245,196,81,.45)}
+  .brand-name span{color:var(--cyan);text-shadow:0 0 14px rgba(34,211,238,.5)}
+  .brand-line{flex:1;height:1px;background:linear-gradient(90deg,var(--gold-border),var(--cyan-border),transparent)}
+  .intro{margin-bottom:18px}
+  .intro h1{font-size:28px;line-height:1.1;letter-spacing:-.02em;margin:0 0 6px;font-weight:800}
+  .intro h1 .hl{color:var(--cyan);text-shadow:0 0 18px rgba(34,211,238,.35)}
+  .intro p{margin:0;color:var(--muted);font-size:15px;max-width:560px}
+  @media(min-width:640px){.intro h1{font-size:34px}}
+
+  /* Main card */
+  .card{background:linear-gradient(180deg,rgba(245,196,81,.045),rgba(34,211,238,.03) 55%,transparent),var(--surface);border:1px solid var(--gold-border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  .card-pad{padding:20px}
+  @media(min-width:640px){.card-pad{padding:24px}}
+
+  .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#9ca3af;display:inline-block;flex-shrink:0}
+  .live-dot.on{background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.15);animation:pulse 1.8s infinite}
+  .live-dot.off{background:#ef4444;box-shadow:0 0 0 4px rgba(239,68,68,.15)}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.25)}70%{box-shadow:0 0 0 6px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+  @media(prefers-reduced-motion:reduce){.live-dot{animation:none}}
+
+  .email-box{display:flex;flex-direction:column;gap:12px;background:var(--surface2);border:1.5px dashed var(--gold-border);border-radius:14px;padding:16px;box-shadow:inset 0 0 24px rgba(245,196,81,.05)}
+  @media(min-width:560px){.email-box{flex-direction:row;align-items:center}}
+  .email-text{flex:1;min-width:0}
+  #emailAddress{font-family:"JetBrains Mono",monospace;font-size:17px;font-weight:600;word-break:break-all;line-height:1.3;color:var(--cyan);text-shadow:0 0 12px rgba(34,211,238,.25)}
+  @media(min-width:640px){#emailAddress{font-size:19px}}
+  .email-sub{font-size:13px;color:var(--muted);margin-top:3px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;padding:0 18px;font-weight:700;font-size:14px;border:1px solid transparent;transition:.15s;text-decoration:none;white-space:nowrap}
+  .btn-primary{background:linear-gradient(135deg,#fde68a,var(--gold) 55%,var(--gold-strong));color:#1a1202;box-shadow:0 0 16px rgba(245,196,81,.35)}
+  .btn-primary:hover{filter:brightness(1.07)}
+  .btn-secondary{background:var(--surface);color:var(--text);border-color:var(--border)}
+  .btn-secondary:hover{border-color:var(--cyan-border);color:var(--cyan)}
+  .btn-ghost{background:transparent;color:var(--muted);border-color:transparent;padding:0 12px}
+  .btn-ghost:hover{color:var(--gold)}
+  .btn-sm{min-height:38px;padding:0 14px;font-size:13px}
+  .btn:disabled{cursor:not-allowed}
+  .btn-primary:disabled{background:#232c3f;color:#64748b;box-shadow:none;filter:none}
+  .btn-secondary:disabled{background:var(--surface2);color:#475569;border-color:var(--border)}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .toolbar .btn{flex:1}
+  @media(min-width:560px){.toolbar .btn{flex:initial}}
+
+  .status-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border);flex-wrap:wrap}
+  .status-left{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .status-right{font-size:13px;color:var(--muted)}
+  #lastCheck{font-variant-numeric:tabular-nums}
+
+  /* Custom form */
+  .custom{margin-top:16px;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+  .custom-head{width:100%;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--surface);border:0;color:var(--text);font-weight:700;font-size:14px;text-align:left}
+  .custom-body{padding:0 16px 16px;display:none}
+  .custom.open .custom-body{display:block}
+  .custom.open .chev{transform:rotate(180deg)}
+  .chev{transition:.2s;color:var(--muted)}
+  .form-row{display:flex;flex-direction:column;gap:10px}
+  @media(min-width:560px){.form-row{flex-direction:row}}
+  .input-wrap{flex:1;display:flex;align-items:stretch;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
+  .input-wrap input{flex:1;border:0;outline:0;padding:0 14px;font-size:15px;background:transparent;color:var(--text);min-width:0}
+  .input-wrap select{border:0;border-left:1px solid var(--border);background:var(--surface2);color:var(--text);padding:0 10px;font-size:14px;max-width:46%;outline:0}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+
+  /* Inbox */
+  .section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 12px}
+  .section-head h2{font-size:19px;margin:0;letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .count-badge{background:var(--cyan);color:#03222b;font-size:12px;font-weight:800;min-width:24px;height:24px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;padding:0 7px;box-shadow:0 0 12px rgba(34,211,238,.4)}
+  .inbox-actions{display:flex;gap:8px;align-items:center}
+  .toggle{font-size:13px;font-weight:700;border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:999px;padding:0 12px;min-height:38px}
+  .toggle.on{color:var(--accent);border-color:var(--accent-border);background:var(--accent-soft)}
+
+  .inbox{background:var(--surface);border:1px solid var(--cyan-border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  .empty{padding:36px 20px;text-align:center}
+  .empty-icon{width:56px;height:56px;border-radius:16px;background:var(--gold-soft);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:26px;box-shadow:0 0 16px rgba(245,196,81,.2)}
+  .empty h3{margin:0 0 6px;font-size:16px}
+  .empty p{margin:0;color:var(--muted);font-size:14px;max-width:420px;margin-inline:auto}
+  .spin{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .msg-list{list-style:none;margin:0;padding:0}
+  .msg-item{width:100%;display:flex;gap:14px;padding:16px;border:0;border-bottom:1px solid var(--border);background:var(--surface);text-align:left;color:var(--text)}
+  .msg-item:last-child{border-bottom:0}
+  .msg-item:hover{background:var(--surface2)}
+  .msg-item.unread{background:var(--accent-soft)}
+  .avatar{width:42px;height:42px;border-radius:50%;background:var(--gold-soft);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0;color:var(--gold)}
+  .msg-main{flex:1;min-width:0}
+  .msg-top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
+  .msg-from{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .msg-time{font-size:12px;color:var(--muted);white-space:nowrap;flex-shrink:0}
+  .msg-subject{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+  .msg-snip{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+  .unread-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:6px}
+
+  /* Detail */
+  .detail{display:none}
+  .detail.open{display:block}
+  .detail-head{padding:18px 20px;border-bottom:1px solid var(--border)}
+  .detail-head h3{margin:0 0 8px;font-size:18px;line-height:1.3}
+  .meta{font-size:13px;color:var(--muted);line-height:1.6}
+  .meta b{color:var(--text)}
+  .detail-body{padding:20px;white-space:pre-wrap;word-break:break-word;font-size:14.5px;line-height:1.7}
+  .detail-body a{color:var(--accent)}
+  .code-highlight{background:var(--gold-soft);border:1px solid var(--gold-border);border-radius:12px;padding:14px;text-align:center;margin:0 20px 16px;box-shadow:0 0 18px rgba(245,196,81,.15)}
+  .code-highlight .code{font-family:"JetBrains Mono",monospace;font-size:22px;font-weight:700;letter-spacing:.12em;color:var(--gold)}
+  .code-highlight .label2{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+
+  /* Info grid */
+  .grid{display:grid;gap:12px;margin-top:16px}
+  @media(min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+  .info-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px}
+  .info-card h3{margin:0 0 10px;font-size:15px;color:var(--gold)}
+  .info-card ol,.info-card ul{margin:0;padding-left:18px;color:var(--muted);font-size:14px}
+  .info-card li{margin:6px 0}
+  .info-card li b{color:var(--text)}
+  .warn{background:var(--warning-bg);border:1px solid var(--warning-border);border-radius:16px;padding:16px 18px;margin-top:12px;display:flex;gap:12px}
+  .warn p{margin:0;font-size:13.5px;color:var(--warning-text);line-height:1.6}
+  .warn p b{color:inherit}
+
+  .history{margin-top:20px}
+  .history h3{font-size:14px;margin:0 0 10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .history-list{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:8px 12px;font-size:13px;font-family:"JetBrains Mono",monospace;display:inline-flex;gap:8px;align-items:center}
+  .chip button{border:0;background:transparent;min-height:24px;padding:0 2px;font-weight:700;color:var(--cyan)}
+
+  .toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,#fde68a,var(--gold) 60%,var(--gold-strong));color:#1a1202;padding:12px 18px;border-radius:999px;font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.4),0 0 18px rgba(245,196,81,.35);opacity:0;pointer-events:none;transition:.25s;z-index:50;max-width:calc(100vw - 32px);text-align:center}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .error-box{display:none;background:#2a1215;border:1px solid #7f1d1d;color:#fca5a5;border-radius:12px;padding:12px 14px;font-size:13.5px;margin-top:12px}
+  .error-box.show{display:block}
+  footer{margin-top:28px;text-align:center;color:var(--muted2);font-size:12.5px;line-height:1.6}
+  footer .fbrand{color:var(--gold);font-weight:800;letter-spacing:.18em;font-size:12px}
+  footer .fbrand span{color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <div class="brand-mark">OH</div>
+    <div class="brand-name">ONE <span>HENDRIUS</span></div>
+    <div class="brand-line"></div>
+  </div>
+  <div class="intro">
+    <h1>Email <span class="hl">Sementara</span></h1>
+    <p>Buat alamat email sekali pakai dalam hitungan detik. Pakai buat daftar, terima kode verifikasi, lalu tinggalkan — tanpa daftar, tanpa nomor HP.</p>
+  </div>
+
+  <!-- Generator -->
+  <section class="card">
+    <div class="card-pad">
+      <div class="label"><span class="live-dot" id="liveDot"></span> <span id="liveLabel">Alamat email kamu — menyiapkan…</span></div>
+
+      <div class="email-box">
+        <div class="email-text">
+          <div id="emailAddress">Membuat email…</div>
+          <div class="email-sub" id="emailSub">Sedang menyiapkan kotak masuk…</div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" id="btnCopy" type="button" disabled>⧉ &nbsp;Salin</button>
+        </div>
+      </div>
+
+      <div id="errorBox" class="error-box" role="alert"></div>
+
+      <div class="toolbar">
+        <button class="btn btn-secondary" id="btnNew" type="button">↻ &nbsp;Email Baru</button>
+        <button class="btn btn-secondary" id="btnRefreshTop" type="button">Cek Inbox</button>
+        <button class="btn btn-ghost" id="btnDelete" type="button">Hapus &amp; Ganti</button>
+      </div>
+
+      <!-- Custom -->
+      <div class="custom" id="customBox">
+        <button class="custom-head" id="customToggle" type="button" aria-expanded="false">
+          <span>Buat alamat sendiri</span>
+          <span class="chev">▾</span>
+        </button>
+        <div class="custom-body">
+          <div class="form-row">
+            <div class="input-wrap">
+              <input id="customName" type="text" placeholder="nama.kamu" autocomplete="off" autocapitalize="none" spellcheck="false" maxlength="30" />
+              <select id="domainSelect" aria-label="Pilih domain"></select>
+            </div>
+            <button class="btn btn-primary" id="btnCustom" type="button">Buat</button>
+          </div>
+          <p class="hint">Huruf kecil, angka, titik dan strip saja. Contoh: <b>budi.tes</b> — kalau sudah dipakai orang lain, ganti sedikit namanya.</p>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        <div class="status-left"><span id="statusText">Menunggu email masuk…</span></div>
+        <div class="status-right">Terakhir dicek: <span id="lastCheck">—</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inbox -->
+  <div class="section-head">
+    <h2>Kotak Masuk <span class="count-badge" id="countBadge">0</span></h2>
+    <div class="inbox-actions">
+      <button class="toggle on" id="autoToggle" type="button" aria-pressed="true">Auto-refresh: Nyala</button>
+      <button class="btn btn-secondary btn-sm" id="btnRefresh" type="button">↻ Refresh</button>
+    </div>
+  </div>
+
+  <section class="inbox" id="inboxBox">
+    <div id="listView">
+      <div class="empty" id="emptyState">
+        <div class="empty-icon">✉</div>
+        <h3>Belum ada email masuk</h3>
+        <p>Salin alamat di atas, pakai buat daftar di situs yang kamu mau. Kode verifikasi dan email masuk akan muncul di sini otomatis.</p>
+        <p style="margin-top:12px"><span class="spin" id="emptySpin"></span> &nbsp;Menunggu… halaman ini cek inbox tiap 8 detik.</p>
+      </div>
+      <ul class="msg-list" id="msgList"></ul>
+    </div>
+
+    <div class="detail" id="detailView">
+      <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:8px">
+        <button class="btn btn-secondary btn-sm" id="btnBack" type="button">← Kembali</button>
+        <button class="btn btn-secondary btn-sm" id="btnCopyCode" type="button" style="display:none">Salin Kode</button>
+      </div>
+      <div class="detail-head">
+        <h3 id="dSubject">(Tanpa subjek)</h3>
+        <div class="meta" id="dMeta"></div>
+      </div>
+      <div class="code-highlight" id="codeBox" style="display:none">
+        <div class="label2">Kode verifikasi terdeteksi</div>
+        <div class="code" id="codeValue"></div>
+      </div>
+      <div class="detail-body" id="dBody">Memuat…</div>
+    </div>
+  </section>
+
+  <!-- History -->
+  <div class="history" id="historyWrap" style="display:none">
+    <h3>Email sebelumnya di sesi ini</h3>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
+  <!-- Info -->
+  <div class="grid">
+    <div class="info-card">
+      <h3>Cara pakai</h3>
+      <ol>
+        <li><b>Salin</b> alamat email di atas.</li>
+        <li><b>Tempel</b> di situs / aplikasi tempat kamu daftar.</li>
+        <li><b>Tunggu</b> — kode verifikasi muncul di Kotak Masuk, biasanya 5–30 detik.</li>
+        <li>Klik emailnya buat lihat isi lengkap dan salin kodenya.</li>
+      </ol>
+    </div>
+    <div class="info-card">
+      <h3>Cocok buat apa?</h3>
+      <ul>
+        <li>Daftar akun coba-coba / trial</li>
+        <li>Terima kode OTP sekali pakai</li>
+        <li>Unduh file yang minta email</li>
+        <li>Hindari spam di email utama kamu</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warn">
+    <div style="font-size:18px;line-height:1">!</div>
+    <p><b>Jangan pakai buat akun penting.</b> Email sementara ini tidak pakai kata sandi pribadi — siapa pun yang tahu alamatnya bisa membaca inbox-nya, dan alamatnya bisa hilang kapan saja. Jangan pakai buat bank, dompet, crypto, atau akun yang ada uangnya. Beberapa situs juga menolak domain email sementara.</p>
+  </div>
+
+  <footer>
+    <div class="fbrand">ONE <span>HENDRIUS</span></div>
+    <div style="margin-top:6px">Layanan kotak masuk memakai Mail.tm — email tersimpan di server mereka, bukan di halaman ini.<br>
+    Ganti email = kotak masuk lama tidak bisa dibuka lagi dari sini. Simpan kode penting sebelum ganti.<br>
+    Versi <span id="verLabel">3</span> — halaman ini memeriksa versi baru tiap menit dan memperbarui dirinya sendiri otomatis.</div>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  var APP_VERSION = 3;
+  var API = 'https://api.mail.tm';
+  var state = {
+    address: '',
+    password: '',
+    token: '',
+    accountId: '',
+    domains: [],
+    messages: [],
+    auto: true,
+    timer: null,
+    loading: false,
+    history: [],
+    currentDetailCode: ''
+  };
+
+  var el = {
+    email: document.getElementById('emailAddress'),
+    emailSub: document.getElementById('emailSub'),
+    error: document.getElementById('errorBox'),
+    status: document.getElementById('statusText'),
+    lastCheck: document.getElementById('lastCheck'),
+    list: document.getElementById('msgList'),
+    empty: document.getElementById('emptyState'),
+    badge: document.getElementById('countBadge'),
+    detail: document.getElementById('detailView'),
+    listView: document.getElementById('listView'),
+    dSubject: document.getElementById('dSubject'),
+    dMeta: document.getElementById('dMeta'),
+    dBody: document.getElementById('dBody'),
+    codeBox: document.getElementById('codeBox'),
+    codeValue: document.getElementById('codeValue'),
+    btnCopyCode: document.getElementById('btnCopyCode'),
+    domainSelect: document.getElementById('domainSelect'),
+    customName: document.getElementById('customName'),
+    toast: document.getElementById('toast'),
+    historyWrap: document.getElementById('historyWrap'),
+    historyList: document.getElementById('historyList'),
+    autoToggle: document.getElementById('autoToggle'),
+    liveDot: document.getElementById('liveDot'),
+    liveLabel: document.getElementById('liveLabel'),
+    btnCopy: document.getElementById('btnCopy')
+  };
+
+  function setLive(status){
+    // status: 'loading' | 'on' | 'off'
+    el.liveDot.classList.remove('on','off');
+    if(status==='on'){
+      el.liveDot.classList.add('on');
+      el.liveLabel.textContent='Alamat email kamu — aktif';
+      el.btnCopy.disabled=false;
+    } else if(status==='off'){
+      el.liveDot.classList.add('off');
+      el.liveLabel.textContent='Alamat email kamu — tidak terhubung';
+      el.btnCopy.disabled=true;
+    } else {
+      el.liveLabel.textContent='Alamat email kamu — menyiapkan…';
+      el.btnCopy.disabled=true;
+    }
+  }
+
+  function toast(msg){
+    el.toast.textContent = msg;
+    el.toast.classList.add('show');
+    setTimeout(function(){ el.toast.classList.remove('show'); }, 2200);
+  }
+  function showError(msg){
+    if(!msg){ el.error.classList.remove('show'); el.error.textContent=''; return; }
+    el.error.textContent = msg;
+    el.error.classList.add('show');
+  }
+  function randomStr(len){
+    var chars='abcdefghijklmnopqrstuvwxyz0123456789';
+    var s='';
+    for(var i=0;i<len;i++) s+=chars[Math.floor(Math.random()*chars.length)];
+    return s;
+  }
+  function randomPassword(){
+    return 'Mt!' + randomStr(10) + Math.floor(Math.random()*90+10);
+  }
+  function randomName(){
+    var first=['budi','sinta','agus','dewi','rudi','maya','eko','rina','dedi','sari','fajar','nina','hendra','putri','yoga','lisa'];
+    var second=['tes','coba','daftar','baru','online','mail','cek','akun'];
+    return first[Math.floor(Math.random()*first.length)] + '.' + second[Math.floor(Math.random()*second.length)] + randomStr(4);
+  }
+  function fmtTime(iso){
+    try{
+      var d=new Date(iso);
+      var now=new Date();
+      var diff=Math.floor((now-d)/1000);
+      if(diff<60) return 'Baru saja';
+      if(diff<3600) return Math.floor(diff/60)+' mnt lalu';
+      if(d.toDateString()===now.toDateString()) return d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+      return d.toLocaleDateString('id-ID',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+    }catch(e){ return ''; }
+  }
+  function fmtFull(iso){
+    try{ return new Date(iso).toLocaleString('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}); }catch(e){ return iso||''; }
+  }
+  function extractCode(text){
+    if(!text) return '';
+    // cari pola kode 4-8 digit, utamakan dekat kata kode/otp/code/verifikasi
+    var m = text.match(/(?:kode|otp|code|verifikasi|verification|pin)[^0-9]{0,30}(\d{4,8})/i);
+    if(m) return m[1];
+    m = text.match(/\b(\d{6})\b/);
+    if(m) return m[1];
+    m = text.match(/\b(\d{4})\b/);
+    if(m) return m[1];
+    return '';
+  }
+  function copyText(t, msg){
+    function done(){ toast(msg||'Disalin'); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(done).catch(function(){ fallback(); });
+    } else fallback();
+    function fallback(){
+      var ta=document.createElement('textarea');
+      ta.value=t; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); done(); }catch(e){ toast('Gagal menyalin — salin manual ya'); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  function api(path, opts){
+    opts = opts || {};
+    var headers = { 'Content-Type':'application/json', 'Accept':'application/json' };
+    if(state.token) headers['Authorization']='Bearer '+state.token;
+    if(opts.headers) for(var k in opts.headers) headers[k]=opts.headers[k];
+    return fetch(API+path, { method: opts.method||'GET', headers: headers, body: opts.body ? JSON.stringify(opts.body) : undefined })
+      .then(function(r){
+        if(r.status===204) return {};
+        return r.text().then(function(txt){
+          var data={};
+          try{ data = txt ? JSON.parse(txt) : {}; }catch(e){}
+          if(!r.ok){
+            var err = new Error((data && (data.message || data.detail || data['hydra:description'])) || ('HTTP '+r.status));
+            err.status=r.status; err.data=data;
+            throw err;
+          }
+          return data;
+        });
+      });
+  }
+
+  function loadDomains(){
+    return api('/domains').then(function(data){
+      var items = data['hydra:member'] || data.member || [];
+      state.domains = items.filter(function(d){ return d.isActive!==false; });
+      el.domainSelect.innerHTML='';
+      state.domains.forEach(function(d){
+        var o=document.createElement('option');
+        o.value=d.domain; o.textContent='@'+d.domain;
+        el.domainSelect.appendChild(o);
+      });
+      if(!state.domains.length) throw new Error('Tidak ada domain tersedia');
+      return state.domains;
+    });
+  }
+
+  function createAccount(address, password){
+    return api('/accounts', { method:'POST', body:{ address: address, password: password }, headers:{} })
+      .then(function(acc){
+        // login buat token
+        return fetch(API+'/token', { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({address:address, password:password}) })
+          .then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.message||'Gagal login'); return j; }); })
+          .then(function(j){
+            state.address=address; state.password=password; state.token=j.token; state.accountId=(acc && acc.id)||'';
+            return state;
+          });
+      });
+  }
+
+  function setCurrentEmailUI(){
+    el.email.textContent = state.address || '—';
+    el.emailSub.textContent = state.address ? 'Kotak masuk aktif — email masuk akan muncul di bawah' : 'Sedang menyiapkan…';
+    if(state.address) setLive('on');
+  }
+
+  function pushHistory(addr){
+    if(!addr) return;
+    if(state.history.indexOf(addr)===-1){
+      // history = alamat sebelumnya (selain yang aktif)
+    }
+  }
+
+  function addToHistory(oldAddr){
+    if(!oldAddr) return;
+    if(state.history.indexOf(oldAddr)!==-1) return;
+    state.history.unshift(oldAddr);
+    if(state.history.length>6) state.history.pop();
+    renderHistory();
+  }
+  function renderHistory(){
+    if(!state.history.length){ el.historyWrap.style.display='none'; return; }
+    el.historyWrap.style.display='block';
+    el.historyList.innerHTML='';
+    state.history.forEach(function(addr){
+      var chip=document.createElement('span'); chip.className='chip';
+      var span=document.createElement('span'); span.textContent=addr;
+      var btn=document.createElement('button'); btn.type='button'; btn.textContent='Salin';
+      btn.addEventListener('click', function(){ copyText(addr,'Alamat lama disalin'); });
+      chip.appendChild(span); chip.appendChild(btn);
+      el.historyList.appendChild(chip);
+    });
+  }
+
+  function generateNew(customName){
+    showError('');
+    setLive('loading');
+    var old = state.address;
+    el.email.textContent='Membuat email…';
+    el.emailSub.textContent='Sebentar, sedang daftar ke server…';
+    el.status.textContent='Membuat alamat baru…';
+    state.messages=[]; renderMessages(); closeDetail();
+
+    var domain = (el.domainSelect.value || (state.domains[0] && state.domains[0].domain) || '');
+    if(!domain){
+      return loadDomains().then(function(){ generateNew(customName); }).catch(function(e){
+        setLive('off');
+        showError('Gagal memuat domain email. Cek koneksi internet lalu coba lagi.');
+        el.email.textContent='Gagal membuat email';
+      });
+    }
+    var name = customName ? customName.trim().toLowerCase().replace(/[^a-z0-9._-]/g,'') : randomName();
+    if(!name) name = randomName();
+    var address = name + '@' + domain;
+    var password = randomPassword();
+
+    // token lama harus dibersihkan dulu supaya POST /accounts tidak bawa auth lama
+    var savedToken = state.token; state.token='';
+    return createAccount(address, password).then(function(){
+      if(old && old!==address) addToHistory(old);
+      setCurrentEmailUI();
+      el.status.textContent='Menunggu email masuk…';
+      el.lastCheck.textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      toast('Email baru siap: '+address);
+      fetchMessages();
+      startAuto();
+    }).catch(function(err){
+      state.token='';
+      // kalau 422 = alamat sudah dipakai
+      if(err && err.status===422){
+        if(customName){
+          showError('Alamat "'+address+'" sudah dipakai. Coba nama lain — tambah angka di belakangnya.');
+          el.email.textContent = old || 'Gagal membuat email';
+          // pulihkan alamat lama kalau ada
+          if(old){ /* token lama sudah hilang, buat ulang tidak bisa — buat acak baru */ generateNew(); }
+        } else {
+          // nama acak tabrakan, coba lagi
+          generateNew();
+        }
+      } else {
+        setLive(old ? 'on' : 'off');
+        showError('Gagal membuat email: '+(err.message||'koneksi bermasalah')+'. Coba tombol Email Baru lagi.');
+        el.email.textContent = old || 'Gagal — coba lagi';
+        el.emailSub.textContent='Klik Email Baru untuk mencoba lagi';
+      }
+    });
+  }
+
+  function fetchMessages(){
+    if(!state.token || state.loading) return Promise.resolve();
+    state.loading=true;
+    return api('/messages?page=1').then(function(data){
+      var items = data['hydra:member'] || [];
+      state.messages = items;
+      renderMessages();
+      el.lastCheck.textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      el.status.textContent = items.length ? (items.length+' email di kotak masuk') : 'Menunggu email masuk…';
+    }).catch(function(err){
+      el.status.textContent='Gagal cek inbox — akan dicoba lagi otomatis';
+    }).finally(function(){ state.loading=false; });
+  }
+
+  function renderMessages(){
+    el.badge.textContent = String(state.messages.length);
+    el.list.innerHTML='';
+    if(!state.messages.length){
+      el.empty.style.display='block';
+      return;
+    }
+    el.empty.style.display='none';
+    state.messages.forEach(function(m){
+      var li=document.createElement('li');
+      var btn=document.createElement('button'); btn.type='button'; btn.className='msg-item'+(m.seen?'':' unread');
+      var fromName = (m.from && (m.from.name || m.from.address)) || 'Pengirim';
+      var initial = (fromName.trim()[0]||'?').toUpperCase();
+      btn.innerHTML='';
+      var av=document.createElement('div'); av.className='avatar'; av.textContent=initial;
+      var main=document.createElement('div'); main.className='msg-main';
+      var top=document.createElement('div'); top.className='msg-top';
+      var fromEl=document.createElement('div'); fromEl.className='msg-from'; fromEl.textContent=fromName;
+      var timeEl=document.createElement('div'); timeEl.className='msg-time'; timeEl.textContent=fmtTime(m.createdAt);
+      top.appendChild(fromEl); top.appendChild(timeEl);
+      var subj=document.createElement('div'); subj.className='msg-subject'; subj.textContent=m.subject||'(Tanpa subjek)';
+      var snip=document.createElement('div'); snip.className='msg-snip'; snip.textContent=m.intro||'';
+      main.appendChild(top); main.appendChild(subj); main.appendChild(snip);
+      btn.appendChild(av); btn.appendChild(main);
+      if(!m.seen){ var dot=document.createElement('div'); dot.className='unread-dot'; btn.appendChild(dot); }
+      btn.addEventListener('click', function(){ openMessage(m.id); });
+      li.appendChild(btn);
+      el.list.appendChild(li);
+    });
+  }
+
+  function openMessage(id){
+    el.listView.style.display='none';
+    el.detail.classList.add('open');
+    el.dBody.textContent='Memuat isi email…';
+    el.dSubject.textContent='Memuat…';
+    el.dMeta.innerHTML='';
+    el.codeBox.style.display='none';
+    el.btnCopyCode.style.display='none';
+    state.currentDetailCode='';
+    api('/messages/'+id).then(function(m){
+      el.dSubject.textContent = m.subject || '(Tanpa subjek)';
+      var fromTxt = m.from ? ((m.from.name? m.from.name+' — ':'') + (m.from.address||'')) : '';
+      var toTxt = m.to && m.to.length ? m.to.map(function(t){return t.address;}).join(', ') : state.address;
+      el.dMeta.innerHTML='';
+      var p1=document.createElement('div'); p1.innerHTML='Dari: '; var b1=document.createElement('b'); b1.textContent=fromTxt; p1.appendChild(b1);
+      var p2=document.createElement('div'); p2.innerHTML='Ke: '; var b2=document.createElement('b'); b2.textContent=toTxt; p2.appendChild(b2);
+      var p3=document.createElement('div'); p3.textContent=fmtFull(m.createdAt);
+      el.dMeta.appendChild(p1); el.dMeta.appendChild(p2); el.dMeta.appendChild(p3);
+      var text = m.text || '';
+      if(!text && m.html && m.html.length){
+        // Parse di dokumen inert DOMParser: tidak menjalankan script / memuat resource dari HTML pengirim.
+        try{
+          var doc = new DOMParser().parseFromString(m.html.join(''), 'text/html');
+          text = (doc.body && doc.body.textContent) || '';
+        }catch(e){ text=''; }
+      }
+      el.dBody.textContent = text || '(Email ini tidak punya teks yang bisa ditampilkan)';
+      var code = extractCode(text) || extractCode(m.subject||'');
+      if(code){
+        state.currentDetailCode=code;
+        el.codeValue.textContent=code;
+        el.codeBox.style.display='block';
+        el.btnCopyCode.style.display='inline-flex';
+      }
+      // tandai sudah dibaca di daftar lokal
+      state.messages.forEach(function(x){ if(x.id===id) x.seen=true; });
+      renderMessages();
+      window.scrollTo({top: document.getElementById('inboxBox').offsetTop - 12, behavior:'smooth'});
+    }).catch(function(){
+      el.dBody.textContent='Gagal memuat email ini. Coba kembali lalu klik lagi.';
+    });
+  }
+  function closeDetail(){
+    el.detail.classList.remove('open');
+    el.listView.style.display='block';
+  }
+
+  function startAuto(){
+    if(state.timer) clearInterval(state.timer);
+    if(state.auto){
+      state.timer=setInterval(function(){
+        if(!document.hidden) fetchMessages();
+      }, 8000);
+    }
+  }
+
+  // Events
+  document.getElementById('btnCopy').addEventListener('click', function(){
+    if(state.address) copyText(state.address,'Email disalin — tinggal tempel');
+  });
+  document.getElementById('btnNew').addEventListener('click', function(){ generateNew(); });
+  document.getElementById('btnDelete').addEventListener('click', function(){ generateNew(); });
+  document.getElementById('btnRefresh').addEventListener('click', function(){ fetchMessages(); toast('Inbox dicek'); });
+  document.getElementById('btnRefreshTop').addEventListener('click', function(){ fetchMessages(); toast('Inbox dicek'); });
+  document.getElementById('btnBack').addEventListener('click', closeDetail);
+  el.btnCopyCode.addEventListener('click', function(){ if(state.currentDetailCode) copyText(state.currentDetailCode,'Kode disalin'); });
+
+  var customBox=document.getElementById('customBox');
+  document.getElementById('customToggle').addEventListener('click', function(){
+    var open=customBox.classList.toggle('open');
+    this.setAttribute('aria-expanded', open?'true':'false');
+  });
+  document.getElementById('btnCustom').addEventListener('click', function(){
+    var v=el.customName.value.trim();
+    if(!v){ toast('Isi dulu nama emailnya'); el.customName.focus(); return; }
+    generateNew(v);
+  });
+  el.customName.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); document.getElementById('btnCustom').click(); } });
+
+  el.autoToggle.addEventListener('click', function(){
+    state.auto=!state.auto;
+    this.classList.toggle('on', state.auto);
+    this.setAttribute('aria-pressed', state.auto?'true':'false');
+    this.textContent='Auto-refresh: '+(state.auto?'Nyala':'Mati');
+    startAuto();
+    toast(state.auto?'Auto-refresh dinyalakan':'Auto-refresh dimatikan');
+  });
+
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden){
+      if(state.auto) fetchMessages();
+      checkUpdate();
+    }
+  });
+
+  // --- Pembaruan otomatis: cek versi terbaru berkala, muat ulang sendiri kalau ada yang baru ---
+  var updatePending = false;
+  function checkUpdate(){
+    if(updatePending) return;
+    fetch('index.html?__vc=' + Date.now(), { cache:'no-store', credentials:'same-origin' })
+      .then(function(r){ if(!r.ok) throw new Error('bad'); return r.text(); })
+      .then(function(html){
+        var m = html.match(/name="app-version"\s+content="(\d+)"/);
+        if(!m) m = html.match(/APP_VERSION\s*=\s*(\d+)/);
+        if(m && parseInt(m[1],10) > APP_VERSION){
+          updatePending = true;
+          toast('Versi baru tersedia — memperbarui otomatis…');
+          setTimeout(function(){ window.location.reload(); }, 1400);
+        }
+      })
+      .catch(function(){ /* diam saja, dicoba lagi nanti */ });
+  }
+  setTimeout(checkUpdate, 20000);
+  setInterval(checkUpdate, 60000);
+  window.addEventListener('focus', checkUpdate);
+
+  // Init
+  setLive('loading');
+  loadDomains().then(function(){
+    generateNew();
+  }).catch(function(){
+    setLive('off');
+    showError('Tidak bisa terhubung ke server email (Mail.tm). Cek koneksi internet kamu, lalu coba tombol Email Baru.');
+    el.email.textContent='Tidak terhubung';
+    el.emailSub.textContent='Cek koneksi lalu coba lagi';
+  });
+})();
+</script>
+</body>
+</html>
